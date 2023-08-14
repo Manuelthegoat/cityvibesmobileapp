@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import ProfileScreen from "./screens/ProfileScreen";
 import SearchScreen from "./screens/SearchScreen";
@@ -145,36 +152,38 @@ export default function App() {
       {/* <NavigationContainer>
         <MyTabs />
       </NavigationContainer> */}
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="Home" component={MyTabs} />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              headerShown: true,
-              headerTransparent: true,
-              headerTitleStyle: {
-                fontFamily: "bold",
-                color: "white",
-              },
-              headerLeft: (props) => (
-                <TouchableOpacity onPress={props.onPress}>
-                  <Image
-                    source={require("./assets/back.png")}
-                    style={{ marginLeft: 10 }}
-                  />
-                </TouchableOpacity>
-              ),
+      <SafeAreaView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
             }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+          >
+            <Stack.Screen name="Home" component={MyTabs} />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                headerShown: true,
+                headerTransparent: true,
+                headerTitleStyle: {
+                  fontFamily: "bold",
+                  color: "white",
+                },
+                headerLeft: (props) => (
+                  <TouchableOpacity onPress={props.onPress}>
+                    <Image
+                      source={require("./assets/back.png")}
+                      style={{ marginLeft: 10 }}
+                    />
+                  </TouchableOpacity>
+                ),
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
     </>
   );
 }

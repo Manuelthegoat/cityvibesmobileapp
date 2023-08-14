@@ -24,7 +24,12 @@ const ProfileScreen = ({ navigation }) => {
         color: "white",
       },
       headerRight: () => (
-        <TouchableOpacity onPress={() => {navigation.navigate("Settings")}} style={{ paddingRight: 5 }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Settings");
+          }}
+          style={{ paddingRight: 5 }}
+        >
           <Ionicons name="settings-outline" size={28} color="white" />
         </TouchableOpacity>
       ),
@@ -37,10 +42,10 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <LinearGradient
-      colors={["rgba(0,0,0,1) ", "rgba(0,0,0,1) 91%", "rgba(37,2,2,1) 97%"]}
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      colors={["#FF512F", "#000000"]}
+      style={{ flex: 1 }}
+      start={{ x: 0.1, y: 0 }}
+      end={{ x: 0.4, y: 0.3 }}
     >
       <ImageBackground
         source={require("../assets/profilebg.png")}
@@ -161,8 +166,8 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flexGrow: 1,
-    justifyContent: 'center',
-    width: '100%',
+    justifyContent: "center",
+    width: "100%",
   },
   tabs: {
     flexDirection: "row",
@@ -192,16 +197,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   socialtitle: {
-    color: 'rgba(255, 255, 255, 1)',
+    color: "rgba(255, 255, 255, 1)",
     fontSize: 22,
-    fontFamily: 'other',
+    fontFamily: "other",
     paddingLeft: 20,
   },
   sociallist: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingTop: 8,
-  }
+  },
 });

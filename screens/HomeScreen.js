@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,6 +13,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SearchBar from "../components/SearchBar";
 import Homeswiper from "../components/Homeswiper";
 import RisingStars from "../components/RisingStars";
+import PostsCard from "../components/PostsCard";
+import PostsCardText from "../components/PostsCardText";
 
 const Stack = createStackNavigator();
 
@@ -20,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
       headerTransparent: true,
       headerTitleStyle: {
         fontFamily: "bold",
-        color: "white"
+        color: "white",
       },
       headerLeft: () => (
         <Image
@@ -37,16 +46,17 @@ const HomeScreen = ({ navigation }) => {
   }, [navigation]);
   return (
     <LinearGradient
-      colors={["rgba(0,0,0,1) 63%", "rgba(91,5,5,1) 91%", "rgba(54,2,2,1) 97%"]}
+      colors={["#ff522fce", "#000000"]}
       style={{ flex: 1 }}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      start={{ x: 0.1, y: 0 }}
+      end={{ x: 0.4, y: 0.2 }}
     >
-      <ScrollView style={styles.view}>
+      <ScrollView contentContainerStyle={styles.view}>
         <SearchBar onSearch={handleSearch} />
         <Homeswiper />
         <RisingStars />
-        <Text style={styles.text}>HomeScreen</Text>
+        <PostsCard />
+        <PostsCardText />
       </ScrollView>
     </LinearGradient>
   );
@@ -55,14 +65,15 @@ const HomeScreen = ({ navigation }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-    view: {
-        flex: 1,
-        paddingTop: 100,
-        paddingLeft: 10,
-        paddingRight: 10,
-    },
-    text: {
-        color: "white",
-        fontFamily: 'regular'
-    }
+  view: {
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: "white",
+    fontFamily: "regular",
+  },
 });

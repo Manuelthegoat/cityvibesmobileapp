@@ -20,12 +20,12 @@ import {
 const SettingsScreen = () => {
   return (
     <LinearGradient
-      colors={["rgba(0,0,0,1) 63%", "rgba(91,5,5,1) 91%", "rgba(54,2,2,1) 97%"]}
+      colors={["#FF512F", "#000000"]}
       style={{ flex: 1 }}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      start={{ x: 0.1, y: 0 }}
+      end={{ x: 0.4, y: 0.3 }}
     >
-      <ScrollView >
+      <ScrollView>
         <View style={styles.view}>
           <View style={styles.listitems}>
             <Ionicons name="notifications-outline" size={27} color="white" />
@@ -154,7 +154,11 @@ const SettingsScreen = () => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.signoutbtn}>
-            <Ionicons name="exit-outline" size={24} color="rgba(177, 26, 6, 1)" />
+            <Ionicons
+              name="exit-outline"
+              size={24}
+              color="rgba(177, 26, 6, 1)"
+            />
             <Text style={styles.signouttext}>Sign out</Text>
           </TouchableOpacity>
         </View>
@@ -187,19 +191,18 @@ const styles = StyleSheet.create({
   },
   signoutbtn: {
     borderRadius: 10,
-    backgroundColor: 'rgba(151, 151, 151, 0.22)',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(151, 151, 151, 0.22)",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 10,
-    width: '80%',
+    width: "80%",
     gap: 4,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   signouttext: {
-    color: '#B11A06',
-    textAlign: 'center',
-    fontFamily: 'other',
-
+    color: "#B11A06",
+    textAlign: "center",
+    fontFamily: "other",
   },
 });

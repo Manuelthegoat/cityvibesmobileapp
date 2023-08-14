@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -35,10 +42,10 @@ const ArtistScreen = ({ navigation }) => {
   }, [navigation]);
   return (
     <LinearGradient
-      colors={["rgba(0,0,0,1) 63%", "rgba(91,5,5,1) 91%", "rgba(37,2,2,1) 97%"]}
+      colors={["#FF512F", "#000000"]}
       style={{ flex: 1 }}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      start={{ x: 0.1, y: 0 }}
+      end={{ x: 0.4, y: 0.3 }}
     >
       <ScrollView style={styles.view}>
         <Homeswiper />
