@@ -1,9 +1,10 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoadingScreen from "./LoadingScreen";
+import Homeswiper from "../components/Homeswiper";
 
 const ArtistScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,10 +40,11 @@ const ArtistScreen = ({ navigation }) => {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
-      <View style={styles.view}>
+      <ScrollView style={styles.view}>
+        <Homeswiper />
         <Text style={styles.text}>ArtistScreen</Text>
         {isLoading && <LoadingScreen />}
-      </View>
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -52,8 +54,9 @@ export default ArtistScreen;
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingTop: 100,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   text: {
     color: "white",

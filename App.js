@@ -126,6 +126,7 @@ export default function App() {
           regular: require("./assets/fonts/Poppins-Regular.ttf"), // Adjust path accordingly
           bold: require("./assets/fonts/Poppins-Bold.ttf"), // Adjust path accordingly
           other: require("./assets/fonts/mulish.ttf"), // Adjust path accordingly
+          mb: require("./assets/fonts/Mulish-Bold.ttf"), // Adjust path accordingly
         });
         setFontLoaded(true);
       } catch (error) {

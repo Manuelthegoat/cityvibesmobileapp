@@ -4,6 +4,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchBar from "../components/SearchBar";
+import Homeswiper from "../components/Homeswiper";
+import RisingStars from "../components/RisingStars";
 
 const Stack = createStackNavigator();
 
@@ -42,6 +44,8 @@ const HomeScreen = ({ navigation }) => {
     >
       <ScrollView style={styles.view}>
         <SearchBar onSearch={handleSearch} />
+        <Homeswiper />
+        <RisingStars />
         <Text style={styles.text}>HomeScreen</Text>
       </ScrollView>
     </LinearGradient>
