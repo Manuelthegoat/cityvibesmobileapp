@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     fontFamily: "other",
     color: "rgba(151, 151, 151, 1)",
     fontSize: 16,
+    marginBottom: 5,
   },
   playIcon: {
     position: "absolute", // This will position the play icon absolutely
