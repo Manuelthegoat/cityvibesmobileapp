@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   ImageBackground,
@@ -9,9 +9,11 @@ import {
 } from "react-native";
 import LoadingScreen from "./LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
+import AuthContext from "../AuthContext";
 
-const AuthScreen = ({ setIsAuth, isLoading, setIsLoading }) => {
-    const navigation = useNavigation();
+const AuthScreen = ({ navigation }) => {
+    const { setIsAuth, setIsLoading, isLoading } = useContext(AuthContext);
+   
   const handleEmailLogin = async () => {
     // Add your email login logic here if any
     setIsLoading(true);
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
   },
   btntext: {
     color: "#FFFFFF",
-    fontFamily: "mb",
+    fontFamily: "other",
   },
   text1: {
     color: "#FFFFFF",

@@ -13,11 +13,18 @@ import SettingsScreen from "./screens/SettingsScreen";
 import Login from "./components/Login";
 import MainFlow from "./components/MainFlow";
 import LoadingScreen from "./screens/LoadingScreen";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import AuthContext from "./AuthContext";
+import PlayPage from "./screens/PlayPage";
+import { Entypo } from "@expo/vector-icons";
+import NotificationScreen from "./screens/NotificationScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     async function loadFonts() {
       try {
@@ -36,64 +43,110 @@ export default function App() {
     loadFonts();
   }, []);
   if (!fontLoaded) {
-    return <LoadingScreen />; 
+    return <LoadingScreen />;
   }
-  
+
   return (
     <>
-     
-      <SafeAreaView style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Homes"
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="MainFlow" component={MainFlow} />
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{
-                headerShown: true,
-                headerTransparent: true,
-                headerTitleStyle: {
-                  fontFamily: "bold",
-                  color: "white",
-                },
-                headerLeft: (props) => (
-                  <TouchableOpacity onPress={props.onPress}>
-                    <Image
-                      source={require("./assets/back.png")}
-                      style={{ marginLeft: 10 }}
-                    />
-                  </TouchableOpacity>
-                ),
+      <AuthContext.Provider value={{ isAuth, setIsAuth, isLoading, setIsLoading }}>
+        <SafeAreaProvider style={{ flex: 1 }}>
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="Homes"
+              screenOptions={{
+                headerShown: false,
               }}
-            />
-            <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{
-                headerShown: true,
-                headerTransparent: true,
-                headerTitleStyle: {
-                  fontFamily: "bold",
-                  color: "white",
-                },
-                headerLeft: (props) => (
-                  <TouchableOpacity onPress={props.onPress}>
-                    <Image
-                      source={require("./assets/back.png")}
-                      style={{ marginLeft: 10 }}
-                    />
-                  </TouchableOpacity>
-                ),
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
+            >
+              <Stack.Screen name="MainFlow" component={MainFlow} />
+              <Stack.Screen
+                name="Login"
+                
+                component={Login}
+                options={{
+                  headerShown: true,
+                  headerTransparent: true,
+                  headerTitle: "",
+                  headerLeft: (props) => (
+                    <TouchableOpacity onPress={props.onPress}>
+                      <Image
+                        source={require("./assets/back.png")}
+                        style={{ marginLeft: 10 }}
+                      />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                  headerShown: true,
+                  headerTransparent: true,
+                  headerTitleStyle: {
+                    fontFamily: "bold",
+                    color: "white",
+                  },
+                  headerLeft: (props) => (
+                    <TouchableOpacity onPress={props.onPress}>
+                      <Image
+                        source={require("./assets/back.png")}
+                        style={{ marginLeft: 10 }}
+                      />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name="Play"
+                component={PlayPage}
+                options={{
+                  headerShown: true,
+                  headerTitle: "Now Playing",
+                  headerTransparent: true,
+                  headerTitleStyle: {
+                    fontFamily: "bold",
+                    color: "white",
+                  },
+                  headerLeft: (props) => (
+                    <TouchableOpacity onPress={props.onPress}>
+                      <Image
+                        source={require("./assets/back.png")}
+                        style={{ marginLeft: 10 }}
+                      />
+                    </TouchableOpacity>
+                  ),
+                  headerRight: (props) => (
+                    <TouchableOpacity style={{marginRight: 4}} >
+                      <Entypo name="dots-three-vertical" size={24} color="white" />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name="Notification"
+                component={NotificationScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: "Notifications",
+                  headerTransparent: true,
+                  headerTitleStyle: {
+                    fontFamily: "bold",
+                    color: "white",
+                  },
+                  headerLeft: (props) => (
+                    <TouchableOpacity onPress={props.onPress}>
+                      <Image
+                        source={require("./assets/back.png")}
+                        style={{ marginLeft: 10 }}
+                      />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </AuthContext.Provider>
     </>
   );
 }

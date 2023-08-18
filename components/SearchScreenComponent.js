@@ -16,7 +16,10 @@ const SearchScreenComponent = ({ onSearch }) => {
       <TextInput
         style={styles.input}
         value={searchQuery}
-        onChangeText={setSearchQuery}
+        onChangeText={(text) => {
+          setSearchQuery(text);
+          onSearch(text);  
+        }}
         placeholder="Search"
         placeholderTextColor="rgba(151, 151, 151, 0.7)"
       />

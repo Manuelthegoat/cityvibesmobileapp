@@ -15,10 +15,15 @@ import Homeswiper from "../components/Homeswiper";
 import RisingStars from "../components/RisingStars";
 import PostsCard from "../components/PostsCard";
 import PostsCardText from "../components/PostsCardText";
+import FloatingIcon from "../components/FloatingIcon";
 
 const Stack = createStackNavigator();
 
 const HomeScreen = ({ navigation }) => {
+  const handleFloatingIconPress = () => {
+    console.log("Floating Icon Pressed!");
+    // Add whatever action you want here
+  };
   const handleSearch = (query) => {
     console.log("Searching for:", query);
     // Handle your search logic here
@@ -38,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
         />
       ),
       headerRight: () => (
-        <TouchableOpacity onPress={() => {}} style={{ paddingRight: 5 }}>
+        <TouchableOpacity onPress={() => {navigation.navigate("Notification")}} style={{ paddingRight: 5 }}>
           <Ionicons name="notifications-outline" size={28} color="white" />
         </TouchableOpacity>
       ),
@@ -58,6 +63,7 @@ const HomeScreen = ({ navigation }) => {
         <PostsCard />
         <PostsCardText />
       </ScrollView>
+      <FloatingIcon onPress={handleFloatingIconPress} />
     </LinearGradient>
   );
 };

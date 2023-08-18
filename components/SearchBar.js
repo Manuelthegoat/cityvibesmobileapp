@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderColor: "transparent",
+    color: 'white',
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 8,

@@ -1,4 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
@@ -9,6 +10,7 @@ import {
   ScrollView,
   ImageBackground,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import Swiper from "react-native-swiper";
 
@@ -16,6 +18,7 @@ const { width } = Dimensions.get("window");
 const slideWidth = width / 2;
 
 const Homeswiper = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.swipertitle}>Featured</Text>
@@ -50,7 +53,10 @@ const Homeswiper = () => {
             />
           </ImageBackground>
         </View>
-        <View style={[styles.slide, { width: slideWidth }]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Play")}
+          style={[styles.slide, { width: slideWidth }]}
+        >
           <ImageBackground
             source={require("../assets/artists/2.png")}
             style={styles.imageBackground}
@@ -73,7 +79,7 @@ const Homeswiper = () => {
               style={styles.playIcon}
             />
           </ImageBackground>
-        </View>
+        </TouchableOpacity>
         <View style={[styles.slide, { width: slideWidth }]}>
           <ImageBackground
             source={require("../assets/artists/3.png")}

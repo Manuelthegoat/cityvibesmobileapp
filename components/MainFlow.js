@@ -1,20 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AuthScreen from "../screens/AuthScreen";
 import MyTabs from "./MyTabs";
+import AuthContext from "../AuthContext";
 
-const MainFlow = () => {
-  const [isAuth, setIsAuth] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+const MainFlow = ({ navigation }) => {
+  const { isAuth, setIsAuth, isLoading, setIsLoading } =
+    useContext(AuthContext);
+    if (isAuth){
+        navigation.navigate('MainFlow')
+    }
 
   if (!isAuth) {
-    return (
-      <AuthScreen
-        setIsAuth={setIsAuth}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-      />
-    );
+    return <AuthScreen navigation={navigation} />;
   }
 
   return <MyTabs />;
