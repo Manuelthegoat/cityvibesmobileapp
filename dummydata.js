@@ -1,17 +1,17 @@
 export const dummyData = [
     {
       image: require("./assets/artists/1.png"),
-      genre: "EDM",
-      duration: "3:45",
-      title: "Song A",
-      artist: "Artist A",
+      genre: "Single",
+      duration: "3.30 min",
+      title: "Love me",
+      artist: "UxGuy",
     },
     {
       image: require("./assets/artists/2.png"),
-      genre: "Afro Beats",
-      duration: "4:15",
-      title: "Song B",
-      artist: "Artist B",
+      genre: "Single",
+      duration: "4.30 min",
+      title: "Last Last",
+      artist: "Burna",
     },
     // ... add more items as you need
   ];

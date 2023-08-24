@@ -12,6 +12,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoadingScreen from "./LoadingScreen";
 import Homeswiper from "../components/Homeswiper";
+import Collaboration from "../components/Collaboration";
+import FeaturedArtists from "../components/FeaturedArtists";
+import ArtistsRising from "../components/ArtistsRising";
 
 const ArtistScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,8 +50,10 @@ const ArtistScreen = ({ navigation }) => {
       start={{ x: 0.1, y: 0 }}
       end={{ x: 0.4, y: 0.3 }}
     >
-      <ScrollView style={styles.view}>
-        <Homeswiper />
+      <ScrollView contentContainerStyle={styles.view} nestedScrollEnabled={true}>
+        <Collaboration />
+        <FeaturedArtists />
+        <ArtistsRising />
         <Text style={styles.text}>ArtistScreen</Text>
         {isLoading && <LoadingScreen />}
       </ScrollView>
@@ -60,7 +65,6 @@ export default ArtistScreen;
 
 const styles = StyleSheet.create({
   view: {
-    flex: 1,
     paddingTop: 100,
     paddingLeft: 10,
     paddingRight: 10,

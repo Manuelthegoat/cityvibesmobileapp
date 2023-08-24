@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   icon: {
-    marginRight: 8,
+    marginRight: 9,
     width: 40,
     height: 40,
   },
@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 8,
     fontFamily: "regular",
+    color: '#979797',
   },
 });

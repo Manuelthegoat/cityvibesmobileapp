@@ -8,7 +8,12 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  EvilIcons,
+  Feather,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import SearchScreenComponent from "../components/SearchScreenComponent";
 import { dummyData } from "../dummydata";
 
@@ -60,12 +65,27 @@ const SearchScreen = ({ navigation }) => {
         <View style={styles.resultsContainer}>
           {searchResults.map((item, index) => (
             <View key={index} style={styles.resultItem}>
-              <Image source={item.image} style={styles.resultImage} />
-              <Text>
-                {item.title} by {item.artist}
-              </Text>
-              <Text>Genre: {item.genre}</Text>
-              <Text>Duration: {item.duration}</Text>
+              <View style={styles.imageContainer}>
+                <Image source={item.image} style={styles.resultImage} />
+
+                <LinearGradient
+                  colors={["#FF512F", "#DD2476"]}
+                  style={styles.playButtonContainer}
+                  start={{ x: 0.1, y: 0 }}
+                  end={{ x: 0.4, y: 0.3 }}
+                >
+                  <TouchableOpacity style={styles.playButton}>
+                    <Feather name="play" size={16} color="white" />
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+
+              <View style={styles.textContainer}>
+                <Text style={styles.genre}>{item.genre}</Text>
+                <Text style={styles.songtitle}>{item.title}</Text>
+                <Text style={styles.artist}>{item.artist}</Text>
+                <Text style={styles.duration}>{item.duration}</Text>
+              </View>
             </View>
           ))}
         </View>
@@ -284,5 +304,68 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginRight: 10,
+  },
+  resultItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  resultImage: {
+    width: 99.838,
+    height: 128.139,
+    borderRadius: 15.723,
+  },
+  imageContainer: {
+    position: "relative",
+    marginRight: 10,
+    marginLeft: 10,
+    marginBottom: 10,
+    width: 99.838, // Matching the image width to ensure consistent layout
+    height: 128.139, // Matching the image height
+    borderRadius: 15.723,
+    overflow: "hidden", // To ensure the playButtonContainer doesn't go outside the bounds
+  },
+  playButtonContainer: {
+    position: "absolute",
+    right: 10,
+    bottom: 10,
+    width: 30, // Adjust as needed
+    height: 30, // Adjust as needed
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 15,
+  },
+  playButton: {
+    // Add any additional styling if needed
+  },
+  textContainer: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 5,
+    paddingLeft: 10,
+  },
+  genre: {
+    color: "#FF512F",
+    fontFamily: "mb",
+    fontSize: 12,
+    marginBottom: '10',
+  },
+  songtitle: {
+    color: "#fff",
+    fontFamily: "mb",
+    fontSize: 16,
+    marginBottom: '10',
+  },
+  artist: {
+    color: "#979797",
+    fontFamily: "mb",
+    fontSize: 12,
+    marginTop: '10',
+  },
+  duration: {
+    color: "rgba(151, 151, 151, 0.60)",
+    fontSize: 8,
+    fontFamily: 'other',
+    marginTop: 5,
   },
 });

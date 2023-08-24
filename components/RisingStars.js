@@ -15,7 +15,7 @@ const circleDiameter = (width - circleMargin * 8) / 4;
 const RisingStars = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.swipertitle}>Featured</Text>
+      <Text style={styles.swipertitle}>Rising Stars</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
