@@ -7,13 +7,14 @@ import AuthContext from "../AuthContext";
 const MainFlow = ({ navigation }) => {
   const { isAuth, setIsAuth, isLoading, setIsLoading } =
     useContext(AuthContext);
-    if (isAuth){
-        navigation.navigate('MainFlow')
-    }
+    // if (isAuth){
+    //     navigation.navigate('MainFlow')
+    // }
 
-  if (!isAuth) {
-    return <AuthScreen navigation={navigation} />;
-  }
+    // if (!isAuth) {
+    //   // Instead of rendering AuthScreen, redirect the user to HomeScreen
+    //   navigation.navigate('Home'); // or whatever your home screen route name is
+    // }
 
   return <MyTabs />;
 };

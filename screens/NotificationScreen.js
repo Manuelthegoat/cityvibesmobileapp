@@ -141,7 +141,7 @@ export default NotificationScreen;
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    paddingTop: Platform.OS === "ios" ? 44 : 100,
+    paddingTop: Platform.OS === "ios" ? 100 : 100,
   },
   othercontainer: {
     alignItems: "center",

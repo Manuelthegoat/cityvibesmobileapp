@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -16,10 +16,14 @@ import RisingStars from "../components/RisingStars";
 import PostsCard from "../components/PostsCard";
 import PostsCardText from "../components/PostsCardText";
 import FloatingIcon from "../components/FloatingIcon";
+import AuthContext from "../AuthContext";
 
 const Stack = createStackNavigator();
 
 const HomeScreen = ({ navigation }) => {
+  const { isAuth, setIsAuth } = useContext(AuthContext);
+
+
   const handleFloatingIconPress = () => {
     console.log("Floating Icon Pressed!");
     // Add whatever action you want here
@@ -30,25 +34,38 @@ const HomeScreen = ({ navigation }) => {
   };
   useEffect(() => {
     navigation.setOptions({
-      title: "CityVibes",
+      headerTitle: () => (
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.melo}>melo</Text>
+          <Text style={styles.tribe}>tribe</Text>
+        </View>
+      ),
       headerTransparent: true,
       headerTitleStyle: {
         fontFamily: "bold",
-        color: "white",
+        color: "#DD2476",
       },
       headerLeft: () => (
         <Image
-          source={require("../assets/headericon.png")}
-          style={{ width: 40, height: 40, marginLeft: 15 }}
+          source={require("../assets/headicon.png")}
+          style={{ width: 60, height: 60, marginLeft: 15 }}
         />
       ),
-      headerRight: () => (
-        <TouchableOpacity onPress={() => {navigation.navigate("Notification")}} style={{ paddingRight: 5 }}>
-          <Ionicons name="notifications-outline" size={28} color="white" />
-        </TouchableOpacity>
-      ),
+      headerRight: () =>
+        isAuth ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Notification");
+            }}
+            style={{ paddingRight: 5 }}
+          >
+            <Ionicons name="notifications-outline" size={28} color="white" />
+          </TouchableOpacity>
+        ) : (
+          <Text style={{ paddingRight: 5, color: "white" }}>Guest Mode</Text>
+        ),
     });
-  }, [navigation]);
+  }, [navigation, isAuth]);
   return (
     <LinearGradient
       colors={["#ff522fce", "#000000"]}
@@ -75,11 +92,21 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     color: "white",
     fontFamily: "regular",
+  },
+  melo: {
+    color: "#FF512F",
+    fontFamily: "melo",
+    fontSize: 28,
+  },
+  tribe: {
+    color: "#DD2476",
+    fontFamily: "melo",
+    fontSize: 28,
   },
 });

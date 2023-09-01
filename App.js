@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 
 import * as Font from "expo-font";
@@ -18,13 +19,23 @@ import AuthContext from "./AuthContext";
 import PlayPage from "./screens/PlayPage";
 import { Entypo } from "@expo/vector-icons";
 import NotificationScreen from "./screens/NotificationScreen";
+import AuthScreen from "./screens/AuthScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 7200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     async function loadFonts() {
       try {
@@ -33,6 +44,8 @@ export default function App() {
           bold: require("./assets/fonts/Poppins-Bold.ttf"), // Adjust path accordingly
           other: require("./assets/fonts/mulish.ttf"), // Adjust path accordingly
           mb: require("./assets/fonts/Mulish-Bold.ttf"), // Adjust path accordingly
+          melobold: require("./assets/fonts/MuseoModerno-Regular.ttf"), // Adjust path accordingly
+          melo: require("./assets/fonts/MuseoModerno-Bold.ttf"), // Adjust path accordingly
         });
         setFontLoaded(true);
       } catch (error) {
@@ -42,25 +55,46 @@ export default function App() {
 
     loadFonts();
   }, []);
-  if (!fontLoaded) {
-    return <LoadingScreen />;
+  // if (!fontLoaded) {
+  //   return <LoadingScreen />;
+  // }
+  if (showSplash) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "black",
+        }}
+      >
+        <Image
+          source={require("./assets/animation.gif")}
+          style={{ width: "100%", height: "100%" }}
+          resizeMode="contain"
+        />
+      </View>
+    );
   }
+ 
 
   return (
     <>
-      <AuthContext.Provider value={{ isAuth, setIsAuth, isLoading, setIsLoading }}>
+      <AuthContext.Provider
+        value={{ isAuth, setIsAuth, isLoading, setIsLoading }}
+      >
         <SafeAreaProvider style={{ flex: 1 }}>
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Homes"
+              initialRouteName={isAuth ? "MainFlow" : "HomeGuest"}
               screenOptions={{
                 headerShown: false,
               }}
             >
               <Stack.Screen name="MainFlow" component={MainFlow} />
+              <Stack.Screen name="AuthScreen" component={AuthScreen} />
               <Stack.Screen
                 name="Login"
-                
                 component={Login}
                 options={{
                   headerShown: true,
@@ -116,8 +150,12 @@ export default function App() {
                     </TouchableOpacity>
                   ),
                   headerRight: (props) => (
-                    <TouchableOpacity style={{marginRight: 4}} >
-                      <Entypo name="dots-three-vertical" size={24} color="white" />
+                    <TouchableOpacity style={{ marginRight: 4 }}>
+                      <Entypo
+                        name="dots-three-vertical"
+                        size={24}
+                        color="white"
+                      />
                     </TouchableOpacity>
                   ),
                 }}
@@ -154,7 +192,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
   },

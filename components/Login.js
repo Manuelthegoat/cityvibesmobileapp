@@ -13,7 +13,7 @@ import { KeyboardAvoidingView, Platform } from "react-native";
 import AuthContext from "../AuthContext";
 import LoadingScreen from "../screens/LoadingScreen";
 
-const Login = () => {
+const Login = ({navigation}) => {
   const { isAuth, setIsAuth, setIsLoading, isLoading } =
     useContext(AuthContext);
   const handleSignUp = async () => {
@@ -30,6 +30,8 @@ const Login = () => {
 
     setIsLoading(false); // end loading
     console.log("Loading set to false");
+    navigation.navigate('Home')
+    
   };
 
   return (
