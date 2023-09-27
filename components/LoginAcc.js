@@ -1,4 +1,5 @@
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,57 +13,50 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import AuthContext from "../AuthContext";
 import LoadingScreen from "../screens/LoadingScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import app from "../config/firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Login = ({ navigation }) => {
+
+const LoginAcc = ({ navigation }) => {
   const { isAuth, setIsAuth, setIsLoading, isLoading } =
     useContext(AuthContext);
-  const [fullName, setFullName] = useState("");
-  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = async () => {
+  const handleSignIn = async () => {
     const auth = getAuth(app);
-    setIsLoading(true); // start loading
-    console.log("Loading set to true");
+    setIsLoading(true);
 
     try {
-      const result = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const result = await signInWithEmailAndPassword(auth, email, password);
 
       if (result.user) {
-        // Save to AsyncStorage
-        await AsyncStorage.setItem("user", JSON.stringify(result.user));
-        console.log("User registered and saved to AsyncStorage");
-      
-        console.log("User authenticated");
-        console.log("Loading set to false");
+        const db = getFirestore(app);
+        const userRef = doc(db, "users", result.user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists) {
+          console.log("User details from Firestore:", userSnap.data());
+
+          // Optional: Save user details to AsyncStorage
+          await AsyncStorage.setItem(
+            "userDetails",
+            JSON.stringify(userSnap.data())
+          );
+        } else {
+          console.error("No user details found in Firestore.");
+        }
+
         setIsAuth(true);
         navigation.navigate("Home");
-        const db = getFirestore(app);
-        await setDoc(doc(db, "users", result.user.uid), {
-          fullName: fullName ,
-          userName: userName,
-        });
-        console.log("User details saved to Firestore");
       }
     } catch (error) {
-      console.error("Error registering user: ", error.message);
+      console.error("Error logging in:", error.message);
     }
-    setIsLoading(false);
 
-    // set the authentication state to true after loading
-  };
-  const inputChangedHandler = (inputId, inputValue) => {
-    console.log("InputId: " + inputId);
-    console.log("InputValue: " + inputValue);
+    setIsLoading(false);
   };
 
   return (
@@ -75,32 +69,10 @@ const Login = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView style={styles.container}>
           <View style={styles.headerContainer}>
-            <Text style={styles.text}>Sign Up</Text>
-            <Text style={styles.subtext}>
-              Fill the form below to create an account
-            </Text>
+            <Text style={styles.text}>Sign In</Text>
+            <Text style={styles.subtext}>Welcome Back</Text>
           </View>
-          <KeyboardAvoidingView behavior="padding" style={styles.bodyContainer}>
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Full Name</Text>
-              <TextInput
-                style={styles.textinput}
-                value={fullName}
-                onChangeText={(text) => setFullName(text)}
-                placeholder="Martin Madami"
-                placeholderTextColor="rgba(151, 151, 151, 0.7)"
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Username</Text>
-              <TextInput
-                style={styles.textinput}
-                value={userName}
-                onChangeText={(text) => setUserName(text)}
-                placeholder="UxGuy"
-                placeholderTextColor="rgba(151, 151, 151, 0.7)"
-              />
-            </View>
+          <View style={styles.bodyContainer}>
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Email</Text>
               <TextInput
@@ -122,16 +94,36 @@ const Login = ({ navigation }) => {
                 placeholderTextColor="rgba(151, 151, 151, 0.7)"
               />
             </View>
-          </KeyboardAvoidingView>
+          </View>
+          <View style={styles.remember}>
+            <View style={styles.remember1}>
+              <Image source={require("../assets/turnon.png")} />
+              <Text style={styles.remembertext}>Remember me</Text>
+            </View>
+            <View style={styles.remember2}>
+              <Text style={styles.remembertext2}>Forgot Password?</Text>
+            </View>
+          </View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btnbg} onPress={handleSignUp}>
-              <Text style={styles.btntext}>Sign Up</Text>
+            <TouchableOpacity style={styles.btnbg} onPress={handleSignIn}>
+              <Text style={styles.btntext}>Sign In</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.tc}>
-            <Text style={styles.tc1}>By signing up you agree to our</Text>
-            <Text style={styles.tc2}>Terms and conditions</Text>
+          <View style={styles.contentContainer}>
+            <Text style={styles.text1}>Or Continue with</Text>
+            <View style={styles.sociallogin}>
+              <TouchableOpacity>
+                <Image source={require("../assets/social/1.png")} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image source={require("../assets/social/2.png")} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image source={require("../assets/social/3.png")} />
+              </TouchableOpacity>
+            </View>
           </View>
+
           {isLoading && <LoadingScreen />}
         </ScrollView>
       </SafeAreaView>
@@ -139,7 +131,7 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+export default LoginAcc;
 
 const styles = StyleSheet.create({
   container: {
@@ -187,7 +179,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30,
+    marginTop: 50,
   },
   btnbg: {
     backgroundColor: "#FF512F",
@@ -213,5 +205,44 @@ const styles = StyleSheet.create({
   tc2: {
     color: "#fff",
     fontFamily: "mb",
+  },
+  remembertext: {
+    fontSize: 12,
+    color: "rgba(151, 151, 151, 0.70)",
+    fontFamily: "mb",
+  },
+  remembertext2: {
+    color: "#fff",
+    fontFamily: "mb",
+    fontSize: 16,
+  },
+  remember: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 12,
+  },
+  remember1: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+  },
+  contentContainer: {
+    flex: 1,
+    // justifyContent: "flex-end", // Align content to the bottom
+    padding: 20,
+    alignItems: "center",
+  },
+  text1: {
+    color: "#FFFFFF",
+    fontFamily: "mb",
+    marginTop: 40,
+  },
+  sociallogin: {
+    flexDirection: "row",
+    marginTop: 30,
+    gap: 25,
   },
 });

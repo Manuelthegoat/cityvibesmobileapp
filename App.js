@@ -20,6 +20,7 @@ import PlayPage from "./screens/PlayPage";
 import { Entypo } from "@expo/vector-icons";
 import NotificationScreen from "./screens/NotificationScreen";
 import AuthScreen from "./screens/AuthScreen";
+import LoginAcc from "./components/LoginAcc";
 
 const Stack = createStackNavigator();
 
@@ -96,6 +97,23 @@ export default function App() {
               <Stack.Screen
                 name="Login"
                 component={Login}
+                options={{
+                  headerShown: true,
+                  headerTransparent: true,
+                  headerTitle: "",
+                  headerLeft: (props) => (
+                    <TouchableOpacity onPress={props.onPress}>
+                      <Image
+                        source={require("./assets/back.png")}
+                        style={{ marginLeft: 10 }}
+                      />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+              <Stack.Screen
+                name="SignIn"
+                component={LoginAcc}
                 options={{
                   headerShown: true,
                   headerTransparent: true,

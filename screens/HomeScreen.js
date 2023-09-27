@@ -62,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
             <Ionicons name="notifications-outline" size={28} color="white" />
           </TouchableOpacity>
         ) : (
-          <Text style={{ paddingRight: 5, color: "white" }}>Guest Mode</Text>
+          <Text style={{ paddingRight: 5, color: "#FF512F", fontFamily: 'bold', fontSize: 12, }}>Guest Mode</Text>
         ),
     });
   }, [navigation, isAuth]);

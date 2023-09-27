@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Alert } from "react-native";
 import React, { useContext } from "react";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "../screens/ProfileScreen";
 import SearchScreen from "../screens/SearchScreen";
@@ -45,17 +45,29 @@ const MyTabs = () => {
               />
             );
           } else if (route.name === "Profile") {
-            return (
-              <Image
-                source={
-                  focused
-                    ? require("../assets/profileopen.png")
-                    : require("../assets/profile.png")
-                }
-                style={{ width: size, height: size }}
-              />
-            );
+            if (isAuth) {
+              // Assuming you have access to `isAuth` here.
+              return (
+                <Image
+                  source={
+                    focused
+                      ? require("../assets/profileopen.png")
+                      : require("../assets/profile.png")
+                  }
+                  style={{ width: size, height: size }}
+                />
+              );
+            } else {
+              return (
+                <AntDesign
+                  name={focused ? "user" : "user"}
+                  size={size}
+                  color={color}
+                />
+              );
+            }
           }
+
           if (route.name === "Chat") {
             if (!isAuth) {
               color = "#362f2f"; // or any color to indicate it's disabled
@@ -137,6 +149,27 @@ const MyTabs = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            if (!isAuth) {
+              e.preventDefault();
+
+              Alert.alert("Log in required", "Please log in to access Profile.", [
+                {
+                  text: "OK",
+                  onPress: () => {
+                    navigation.navigate("AuthScreen");
+                  },
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancelled"),
+                  style: "cancel",
+                },
+              ]);
+            }
+          },
+        })}
         options={{
           tabBarStyle: { backgroundColor: "black", borderTopColor: "black" },
         }}

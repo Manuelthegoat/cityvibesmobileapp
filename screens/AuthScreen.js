@@ -23,6 +23,15 @@ const AuthScreen = ({ navigation }) => {
 
     setIsLoading(false);
   };
+  const handleSignIn = async () => {
+    // Add your email login logic here if any
+    setIsLoading(true);
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    // setIsAuth(true);
+    navigation.navigate("SignIn");
+
+    setIsLoading(false);
+  };
   return (
     <ImageBackground
       source={require("../assets/signupbg.png")}
@@ -48,7 +57,7 @@ const AuthScreen = ({ navigation }) => {
         <Text style={styles.text2}>
           Already have an account?{" "}
           <TouchableOpacity>
-            <Text style={styles.text3}>Sign In</Text>
+            <Text style={styles.text3} onPress={handleSignIn}>Sign In</Text>
           </TouchableOpacity>{" "}
         </Text>
       </View>
