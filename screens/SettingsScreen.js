@@ -16,8 +16,13 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SettingsScreen = () => {
+const SettingsScreen = ({navigation}) => {
+  const removeAuthStatus = async () => {
+    await AsyncStorage.removeItem('Authenticated');
+    navigation.navigate("AuthScreen")
+  };
   return (
     <LinearGradient
       colors={["#FF512F", "#000000"]}
@@ -153,7 +158,7 @@ const SettingsScreen = () => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.signoutbtn}>
+          <TouchableOpacity style={styles.signoutbtn} onPress={removeAuthStatus}>
             <Ionicons
               name="exit-outline"
               size={24}
@@ -172,7 +177,7 @@ export default SettingsScreen;
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    paddingTop: Platform.OS === "ios" ? 44 : 100,
+    paddingTop: Platform.OS === "ios" ? 100 : 100,
     paddingBottom: 30,
   },
   listitems: {

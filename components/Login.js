@@ -40,6 +40,9 @@ const Login = ({ navigation }) => {
       if (result.user) {
         // Save to AsyncStorage
         await AsyncStorage.setItem("user", JSON.stringify(result.user));
+        await AsyncStorage.setItem("rememberedEmail", email);
+        await AsyncStorage.setItem("rememberedPassword", password);
+        await AsyncStorage.setItem("Authenticated", "yeso");
         console.log("User registered and saved to AsyncStorage");
       
         console.log("User authenticated");

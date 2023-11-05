@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   ImageBackground,
@@ -10,10 +10,42 @@ import {
 import LoadingScreen from "./LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../AuthContext";
-
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+//web 185098123861-fh3qr9sq32kld816ceti375jjlour8kl.apps.googleusercontent.com
+//IOS 185098123861-u4kg6jsrnffe4q527787704poktn4p4m.apps.googleusercontent.com
+//Android 185098123861-71l008bc9r8jenvf7300mesqbq1u5q1b.apps.googleusercontent.com
+WebBrowser.maybeCompleteAuthSession();
 const AuthScreen = ({ navigation }) => {
-    const { setIsAuth, setIsLoading, isLoading } = useContext(AuthContext);
-   
+  const { setIsAuth, setIsLoading, isLoading } = useContext(AuthContext);
+  const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId:
+      "185098123861-fh3qr9sq32kld816ceti375jjlour8kl.apps.googleusercontent.com",
+    iosClientId:
+      "185098123861-u4kg6jsrnffe4q527787704poktn4p4m.apps.googleusercontent.com",
+    androidClientId:
+      "185098123861-71l008bc9r8jenvf7300mesqbq1u5q1b.apps.googleusercontent.com",
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      setAccessToken(response.authentication.accessToken);
+      accessToken && fetchUserInfo();
+    }
+  }, [response, accessToken]);
+
+  async function fetchUserInfo() {
+    let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const userInfo = await response.json();
+    console.log(userInfo);
+  }
+
   const handleEmailLogin = async () => {
     // Add your email login logic here if any
     setIsLoading(true);
@@ -44,7 +76,12 @@ const AuthScreen = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.text1}>Or sign up with</Text>
         <View style={styles.sociallogin}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            disabled={!request}
+            onPress={() => {
+              promptAsync();
+            }}
+          >
             <Image source={require("../assets/social/1.png")} />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -57,7 +94,9 @@ const AuthScreen = ({ navigation }) => {
         <Text style={styles.text2}>
           Already have an account?{" "}
           <TouchableOpacity>
-            <Text style={styles.text3} onPress={handleSignIn}>Sign In</Text>
+            <Text style={styles.text3} onPress={handleSignIn}>
+              Sign In
+            </Text>
           </TouchableOpacity>{" "}
         </Text>
       </View>

@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
+import { Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import * as Font from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -21,14 +14,21 @@ import { Entypo } from "@expo/vector-icons";
 import NotificationScreen from "./screens/NotificationScreen";
 import AuthScreen from "./screens/AuthScreen";
 import LoginAcc from "./components/LoginAcc";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import app from "./config/firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {  useNavigation } from '@react-navigation/native';
+
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [showSplash, setShowSplash] = useState(true);
+  // const navigation = useNavigation();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
@@ -41,12 +41,12 @@ export default function App() {
     async function loadFonts() {
       try {
         await Font.loadAsync({
-          regular: require("./assets/fonts/Poppins-Regular.ttf"), // Adjust path accordingly
-          bold: require("./assets/fonts/Poppins-Bold.ttf"), // Adjust path accordingly
-          other: require("./assets/fonts/mulish.ttf"), // Adjust path accordingly
-          mb: require("./assets/fonts/Mulish-Bold.ttf"), // Adjust path accordingly
-          melobold: require("./assets/fonts/MuseoModerno-Regular.ttf"), // Adjust path accordingly
-          melo: require("./assets/fonts/MuseoModerno-Bold.ttf"), // Adjust path accordingly
+          regular: require("./assets/fonts/Poppins-Regular.ttf"),
+          bold: require("./assets/fonts/Poppins-Bold.ttf"),
+          other: require("./assets/fonts/mulish.ttf"),
+          mb: require("./assets/fonts/Mulish-Bold.ttf"),
+          melobold: require("./assets/fonts/MuseoModerno-Regular.ttf"),
+          melo: require("./assets/fonts/MuseoModerno-Bold.ttf"),
         });
         setFontLoaded(true);
       } catch (error) {
@@ -56,9 +56,14 @@ export default function App() {
 
     loadFonts();
   }, []);
-  // if (!fontLoaded) {
-  //   return <LoadingScreen />;
-  // }
+
+  useEffect(() => {
+    if (fontLoaded) {
+      setIsLoading(false);
+    }
+  }, [fontLoaded]);
+
+  
   if (showSplash) {
     return (
       <View
@@ -77,133 +82,60 @@ export default function App() {
       </View>
     );
   }
- 
 
   return (
-    <>
-      <AuthContext.Provider
-        value={{ isAuth, setIsAuth, isLoading, setIsLoading }}
-      >
-        <SafeAreaProvider style={{ flex: 1 }}>
-          <NavigationContainer>
-            <Stack.Navigator
-              initialRouteName={isAuth ? "MainFlow" : "HomeGuest"}
-              screenOptions={{
-                headerShown: false,
+    <AuthContext.Provider value={{ isAuth, setIsAuth, isLoading, setIsLoading }}>
+      <SafeAreaProvider style={{ flex: 1 }}>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={isAuth ? "MainFlow" : "HomeGuest"}
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="MainFlow" component={MainFlow} />
+            <Stack.Screen name="AuthScreen" component={AuthScreen} />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{
+                headerShown: true,
+                headerTransparent: true,
+                headerTitle: "",
+                headerLeft: (props) => (
+                  <TouchableOpacity onPress={props.onPress}>
+                    <Image
+                      source={require("./assets/back.png")}
+                      style={{ marginLeft: 10 }}
+                    />
+                  </TouchableOpacity>
+                ),
               }}
-            >
-              <Stack.Screen name="MainFlow" component={MainFlow} />
-              <Stack.Screen name="AuthScreen" component={AuthScreen} />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{
-                  headerShown: true,
-                  headerTransparent: true,
-                  headerTitle: "",
-                  headerLeft: (props) => (
-                    <TouchableOpacity onPress={props.onPress}>
-                      <Image
-                        source={require("./assets/back.png")}
-                        style={{ marginLeft: 10 }}
-                      />
-                    </TouchableOpacity>
-                  ),
-                }}
-              />
-              <Stack.Screen
-                name="SignIn"
-                component={LoginAcc}
-                options={{
-                  headerShown: true,
-                  headerTransparent: true,
-                  headerTitle: "",
-                  headerLeft: (props) => (
-                    <TouchableOpacity onPress={props.onPress}>
-                      <Image
-                        source={require("./assets/back.png")}
-                        style={{ marginLeft: 10 }}
-                      />
-                    </TouchableOpacity>
-                  ),
-                }}
-              />
-              <Stack.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{
-                  headerShown: true,
-                  headerTransparent: true,
-                  headerTitleStyle: {
-                    fontFamily: "bold",
-                    color: "white",
-                  },
-                  headerLeft: (props) => (
-                    <TouchableOpacity onPress={props.onPress}>
-                      <Image
-                        source={require("./assets/back.png")}
-                        style={{ marginLeft: 10 }}
-                      />
-                    </TouchableOpacity>
-                  ),
-                }}
-              />
-              <Stack.Screen
-                name="Play"
-                component={PlayPage}
-                options={{
-                  headerShown: true,
-                  headerTitle: "Now Playing",
-                  headerTransparent: true,
-                  headerTitleStyle: {
-                    fontFamily: "bold",
-                    color: "white",
-                  },
-                  headerLeft: (props) => (
-                    <TouchableOpacity onPress={props.onPress}>
-                      <Image
-                        source={require("./assets/back.png")}
-                        style={{ marginLeft: 10 }}
-                      />
-                    </TouchableOpacity>
-                  ),
-                  headerRight: (props) => (
-                    <TouchableOpacity style={{ marginRight: 4 }}>
-                      <Entypo
-                        name="dots-three-vertical"
-                        size={24}
-                        color="white"
-                      />
-                    </TouchableOpacity>
-                  ),
-                }}
-              />
-              <Stack.Screen
-                name="Notification"
-                component={NotificationScreen}
-                options={{
-                  headerShown: true,
-                  headerTitle: "Notifications",
-                  headerTransparent: true,
-                  headerTitleStyle: {
-                    fontFamily: "bold",
-                    color: "white",
-                  },
-                  headerLeft: (props) => (
-                    <TouchableOpacity onPress={props.onPress}>
-                      <Image
-                        source={require("./assets/back.png")}
-                        style={{ marginLeft: 10 }}
-                      />
-                    </TouchableOpacity>
-                  ),
-                }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </AuthContext.Provider>
-    </>
+            />
+            <Stack.Screen
+              name="SignIn"
+              component={LoginAcc}
+              options={{
+                headerShown: true,
+                headerTransparent: true,
+                headerTitle: "",
+                headerLeft: (props) => (
+                  <TouchableOpacity onPress={props.onPress}>
+                    <Image
+                      source={require("./assets/back.png")}
+                      style={{ marginLeft: 10 }}
+                    />
+                  </TouchableOpacity>
+                ),
+              }}
+            />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="Play" component={PlayPage} />
+            <Stack.Screen name="Notification" component={NotificationScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </AuthContext.Provider>
   );
 }
 

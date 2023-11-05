@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAvoidingView, Platform } from "react-native";
@@ -18,12 +18,27 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import app from "../config/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const LoginAcc = ({ navigation }) => {
   const { isAuth, setIsAuth, setIsLoading, isLoading } =
     useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  useEffect(() => {
+    const loadRememberedCredentials = async () => {
+      const rememberedEmail = await AsyncStorage.getItem("rememberedEmail");
+      const rememberedPassword = await AsyncStorage.getItem(
+        "rememberedPassword"
+      );
+
+      if (rememberedEmail && rememberedPassword) {
+        setEmail(rememberedEmail);
+        setPassword(rememberedPassword);
+        // setRememberMe(true); // Set the "Remember Me" checkbox to checked
+      }
+    };
+
+    loadRememberedCredentials();
+  }, []);
 
   const handleSignIn = async () => {
     const auth = getAuth(app);
@@ -33,6 +48,9 @@ const LoginAcc = ({ navigation }) => {
       const result = await signInWithEmailAndPassword(auth, email, password);
 
       if (result.user) {
+        await AsyncStorage.setItem("rememberedEmail", email);
+        await AsyncStorage.setItem("rememberedPassword", password);
+        await AsyncStorage.setItem("Authenticated", "yeso");
         const db = getFirestore(app);
         const userRef = doc(db, "users", result.user.uid);
         const userSnap = await getDoc(userRef);
